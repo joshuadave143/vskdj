@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://universal-voting-system.herokuapp.com'),
+    'url' => env('APP_URL', 'http://universal-voting-system.herokuapp.com'),
 
     /*
     |--------------------------------------------------------------------------
