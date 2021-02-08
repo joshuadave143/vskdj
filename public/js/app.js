@@ -3167,6 +3167,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3175,7 +3183,8 @@ __webpack_require__.r(__webpack_exports__);
         voter_id: '',
         student_id: '',
         name: '',
-        course: ''
+        course: '',
+        passcode: ''
       },
       voter_id: '',
       pagination: {},
@@ -3332,6 +3341,7 @@ __webpack_require__.r(__webpack_exports__);
       this.voter.student_id = voter.student_id;
       this.voter.name = voter.name;
       this.voter.course = voter.course;
+      this.voter.passcode = voter.passcode;
     },
     close: function close() {
       this.edit = false;
@@ -3339,6 +3349,7 @@ __webpack_require__.r(__webpack_exports__);
       this.voter.student_id = '';
       this.voter.name = '';
       this.voter.course = '';
+      this.voter.passcode = '';
     },
     newForm: function newForm() {
       this.close();
@@ -3533,9 +3544,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3549,6 +3557,7 @@ __webpack_require__.r(__webpack_exports__);
       voter_id: '',
       votes: [],
       student_id: '',
+      passcode: '',
       result: ""
     };
   },
@@ -3589,6 +3598,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.$toastr.s('Ballot Submitted');
 
           _this.student_id = "";
+          _this.passcode = "";
           $('#startID').show();
           $('.listc').hide('fold');
         }
@@ -3627,7 +3637,18 @@ __webpack_require__.r(__webpack_exports__);
     getvoterDetials: function getvoterDetials() {
       var _this3 = this;
 
-      fetch("../api/voter_page/get_voter_info=".concat(this.student_id)).then(function (res) {
+      if (this.passcode == "" && this.student_id == "") {
+        this.$toastr.e("Please enter ID NUMBER and PASSCODE!");
+        return;
+      } else if (this.passcode == "") {
+        this.$toastr.e("Please enter PASSCODE!");
+        return;
+      } else if (this.student_id == "") {
+        this.$toastr.e("Please enter ID NUMBER!");
+        return;
+      }
+
+      fetch("../api/voter_page/get_voter_info=".concat(this.student_id, "&").concat(this.passcode)).then(function (res) {
         return res.json();
       }).then(function (res) {
         if (res.msg != undefined) {
@@ -36945,6 +36966,8 @@ var render = function() {
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(voter.course))]),
               _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(voter.passcode))]),
+              _vm._v(" "),
               _c("td", [
                 _c(
                   "button",
@@ -37366,7 +37389,7 @@ var render = function() {
                       staticClass: "form-control",
                       attrs: {
                         type: "text",
-                        placeholder: "course",
+                        placeholder: "Course",
                         required: ""
                       },
                       domProps: { value: _vm.voter.course },
@@ -37376,6 +37399,38 @@ var render = function() {
                             return
                           }
                           _vm.$set(_vm.voter, "course", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "course" } }, [
+                      _vm._v("Passcode")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.voter.passcode,
+                          expression: "voter.passcode"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        placeholder: "Passcode",
+                        required: ""
+                      },
+                      domProps: { value: _vm.voter.passcode },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.voter, "passcode", $event.target.value)
                         }
                       }
                     })
@@ -37438,7 +37493,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("\n                Name\n        ")]),
         _vm._v(" "),
-        _c("th", [_vm._v("\n                Course\n        ")]),
+        _c("th", [_vm._v("\n                Position\n        ")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("\n                Passcode\n        ")]),
         _vm._v(" "),
         _c("th", [_vm._v("\n                Actions\n        ")])
       ])
@@ -37496,50 +37553,86 @@ var render = function() {
         _c("div", { staticClass: "portlet-body form" }, [
           _c("div", { staticClass: "form-body" }, [
             _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-md-10" }, [
-                  _c("div", { staticClass: "input-group" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.student_id,
-                          expression: "student_id"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.student_id },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.student_id = $event.target.value
-                        }
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "exampleInputEmail1" } }, [
+                  _vm._v("ID NUMBER")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.student_id,
+                      expression: "student_id"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    placeholder: "ID NUMBER",
+                    required: ""
+                  },
+                  domProps: { value: _vm.student_id },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
                       }
-                    }),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "input-group-btn" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-info",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              return _vm.getvoterDetials()
-                            }
-                          }
-                        },
-                        [_vm._v("Go!")]
-                      )
-                    ])
-                  ])
-                ])
+                      _vm.student_id = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "exampleInputEmail1" } }, [
+                  _vm._v("PASSCODE")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.passcode,
+                      expression: "passcode"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "PASSWORD",
+                    placeholder: "PASSCODE",
+                    required: ""
+                  },
+                  domProps: { value: _vm.passcode },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.passcode = $event.target.value
+                    }
+                  }
+                })
               ])
             ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-actions" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-info",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.getvoterDetials()
+                  }
+                }
+              },
+              [_vm._v("Login")]
+            )
           ])
         ])
       ]
@@ -37869,7 +37962,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "portlet-title" }, [
       _c("div", { staticClass: "caption" }, [
         _c("i", { staticClass: "fa fa-barcode" }),
-        _vm._v(" ID NUMBER\n            ")
+        _vm._v(" LOGIN\n            ")
       ])
     ])
   },

@@ -47,7 +47,7 @@ Route::put('voter/search', 'votersController@search');
 
 // =================== for voters page ==========================
 // get detials
-Route::get('voter_page/get_voter_info={id}', 'votersController@getDetials');
+Route::get('voter_page/get_voter_info={id}&{passcode}', 'votersController@getDetials');
 // preview
 Route::post('voter/votesprev', 'votersController@votesprev');
 

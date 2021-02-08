@@ -33,7 +33,10 @@
                     Name
             </th>
             <th>
-                    Course
+                    Position
+            </th>
+            <th>
+                    Passcode
             </th>
             <th>
                     Actions
@@ -46,6 +49,7 @@
                 <td>{{ voter.student_id }}</td>
                 <td>{{ voter.name }}</td>
                 <td>{{ voter.course }}</td>
+                <td>{{ voter.passcode }}</td>
                 <td>
                     <button class="btn btn-danger" @click="deleteVoter(voter.voter_id)">Delete</button>
                     <button data-toggle="modal" data-target="#voterForm" class="btn btn-warning" @click="editVoter(voter)" >Edit</button>
@@ -142,7 +146,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="course">Course</label>
-                                    <input v-model="voter.course" type="text" class="form-control" placeholder="course" required>
+                                    <input v-model="voter.course" type="text" class="form-control" placeholder="Course" required>
+                                </div>  
+                                <div class="form-group">
+                                    <label for="course">Passcode</label>
+                                    <input v-model="voter.passcode" type="text" class="form-control" placeholder="Passcode" required>
                                 </div>                           
                         </div>
                         <div class="modal-footer">
@@ -169,7 +177,8 @@ export default {
                 voter_id:'',
                 student_id:'',
                 name:'',
-                course:''
+                course:'',
+                passcode:''
             },
             voter_id:'',
             pagination:{},
@@ -313,6 +322,7 @@ export default {
             this.voter.student_id = voter.student_id;
             this.voter.name = voter.name;
             this.voter.course = voter.course;
+            this.voter.passcode = voter.passcode;
         },
         close(){
             this.edit = false;
@@ -320,6 +330,7 @@ export default {
             this.voter.student_id = '';
             this.voter.name = '';
             this.voter.course ='';
+            this.voter.passcode ='';
         },
         newForm(){
             this.close();

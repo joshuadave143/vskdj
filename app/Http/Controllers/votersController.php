@@ -105,6 +105,7 @@ class votersController extends Controller
         $voter->student_id = $request->input('student_id');
         $voter->name = $request->input('name');
         $voter->course = $request->input('course');
+        $voter->passcode = $request->input('passcode');
 
         if($voter->save()){
             return new VoterResource($voter);
@@ -143,8 +144,8 @@ class votersController extends Controller
         }
     }
 // ===================== VOTERS PAGE ======================== //
-    public function getDetials($id){
-        $voter = votersModel::where('student_id',$id)->first();
+    public function getDetials($id,$passcode){
+        $voter = votersModel::where('student_id',$id)->where('passcode',$passcode)->first();
         if( $voter == "" ){
             return ["msg" => "Voter does not exist!"];
         }

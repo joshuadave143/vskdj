@@ -3,29 +3,26 @@
         <div id="startID" class="portlet col-md-6 col-xs-offset-3">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-barcode"></i> ID NUMBER
+                    <i class="fa fa-barcode"></i> LOGIN
                 </div>
             </div>
             <div class="portlet-body form">
                 <div class="form-body">
                     <div class="form-group">
                         <!-- <h4 class="block">ID NUMBER</h4> -->
-                            <div class="row">
-                                <!-- /.col-md-6 -->
-                                <div class="col-md-10">
-                                    <div class="input-group">
-                                        <input v-model="student_id" type="text" class="form-control">
-                                        
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-info" @click="getvoterDetials()" type="button">Go!</button>
-                                        </span>
-                                    </div>
-                                    <!-- /input-group -->
-                                </div>
-                                <!-- /.col-md-6 -->
-                            </div>
-                            <!-- /.row -->
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">ID NUMBER</label>
+                            <input v-model="student_id" type="text" class="form-control" placeholder="ID NUMBER" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">PASSCODE</label>
+                            <input v-model="passcode" type="PASSWORD" class="form-control" placeholder="PASSCODE" required>
+                        </div>
+                            
                     </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button"  @click="getvoterDetials()" class="btn btn-info">Login</button>
                 </div>
             </div>
         </div>
@@ -192,6 +189,7 @@ export default {
             voter_id:'',
             votes:[],
             student_id:'',
+            passcode:'',
             result:""
 
         }        
@@ -229,6 +227,7 @@ export default {
 		    
                     this.$toastr.s('Ballot Submitted');
                     this.student_id = ""
+                    this.passcode   = ""
                     $('#startID').show()
                     $('.listc').hide('fold')
                 }
@@ -261,7 +260,19 @@ export default {
             .catch(err => console.log(err))
         },
         getvoterDetials(){
-            fetch(`../api/voter_page/get_voter_info=${this.student_id}`)
+            if(this.passcode == "" && this.student_id == ""){
+                this.$toastr.e("Please enter ID NUMBER and PASSCODE!");
+                return
+            }
+            else if(this.passcode == ""){
+                this.$toastr.e("Please enter PASSCODE!");
+                return
+            }
+            else if(this.student_id == ""){
+                this.$toastr.e("Please enter ID NUMBER!");
+                return
+            }
+            fetch(`../api/voter_page/get_voter_info=${this.student_id}&${this.passcode}`)
             .then(res => res.json())
             .then(res => {
                 if( res.msg != undefined ){
